@@ -9,30 +9,65 @@
 #El juego finaliza cuando el jugador queda sin vidas, cuando adivina todas las letras de la palabra o 
 #cuando selecciona no jugar más. Para todos los casos se debe mostrar un mensaje indicando si ganó la partida o si perdió.
 import random
+# comenzamos con un msj para el usuario
+print(" ")
+print("¡Bienvenido al juego: Adivinando la palabra!")
+# Aca hice dos listas para poder usarlas en el juego
+Imagenes = ["😊","😒","😢","😣","😵","☠️","👻"]
 
-print("Bienvenido al juego adivinando la palabra 😊")
-
-Imagenes = ["🤦‍♂️","😒","😢","😣","😵","☠️","👻"]
-
-Palabras = ["mesa", "lámpara", "cuaderno", "taza", "bolígrafo", "silla", "computadora"]
-
-def palabraRandom():
-    p = random.randint(0,len(Palabras)-1)
-    return Palabras[p]
-
-def esconderPalabra ():
-  palabra = palabraRandom()
-  ocultarPalabra = ["*"]*len(palabra)
-  return ocultarPalabra
-
-vidas = 0 
-
-def juego (ocultarPalabra, vidas):
-   print (Imagenes[vidas])
-   print ('')
-   print(ocultarPalabra)
-
-
-# En esta seccion voy a proponer la estructura del while para determinar la validez de la 
-# palabra y si corresponde a una respuesta correcto en el juego. 
-   
+Palabras = ["mesa", "lampara", "cuaderno", "taza", "bolígrafo", "silla", "computadora"]
+#Con randon elijo una palabra de la lista
+palabra = random.choice(Palabras)
+#Con esta variable mas la funcion ocultamos la palabra
+ocultarPalabra = ["-"]*len(palabra)
+#inicio la variable de vidas
+v = 6
+#En esta lista ponemos las letras incorrectas que ingreso el usuario, para poder mostrar el conteo
+letrasIncorrectas = []
+#defenimos esta funcion para poder mostrar las caracteristicas del juego
+def juego():
+   print(" ")
+   print(Imagenes[6-v])
+   print('')
+   print("palabra: " + " ".join(ocultarPalabra))
+   print('')
+   print("❤️ "+" " +str(v))
+   print('')
+   print("❌ cantidad de letras incorrectas: " + str(len(letrasIncorrectas)))
+   print('')
+#Realizamos el bucle para que se pueda pueda mostrar el juego y que tenga en cuenta la logica
+while  v > 0 and "-" in ocultarPalabra: 
+   juego()
+   #el usuario ingresa la letra y verificamos si es una letra
+   letra = input("✍️  ingresa una letra para adivinar la palabra: ").lower()
+   print(" ")
+   if not letra.isalpha() or len(letra) != 1:
+      print("❌  por favor ingrese solo una letra del abecedario")
+      letrasIncorrectas.append(letra)
+      v -= 1
+      continue
+   #verificamos si la letra ingresada pertenece a la palabra
+   if letra in palabra: 
+      for i in range(len(palabra)):
+         if palabra[i]==letra:
+            ocultarPalabra[i] = letra
+            print("🎉 ¡Bien! la letra esta en la palabra ")
+            print(" ")
+# Aca se restara una vida por letra que o este en la palabra
+   else:
+      letrasIncorrectas.append(letra)
+      v -= 1
+      print(" ")
+      print("❌  esa letra no esta en la palabra")
+      print(" ")
+      print("Te quedan " + str(v) + " vidas ❤️")
+      print(" ")
+# si el usuariose queda sin vidas o logra ganar se verificara con este if
+if "-" in ocultarPalabra:
+      print(" ")
+      print("❌ te quedaste sin intentos. La palabra era "+ " ".join(palabra))
+      print(" ")
+else: 
+      print(" ") 
+      print("🎉  felicitaciones adivinaste la palabra: "+ " ".join(palabra))
+      print(" ")
